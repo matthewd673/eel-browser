@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Eel Browser</title>
+		<style>
+			body
+			{
+				background-color: #c4c4c4;
+			}
+			b
+			{
+				color: #dd1811;
+				font-family: monospace;
+			}
+			a
+			{
+				color: #2255ff;
+				font-family: sans-serif;
+			}
+			p
+			{
+				font-family: sans-serif;
+				color: #222222;
+				font-size: 8pt;
+			}
+			#preview
+			{
+				border: 1px black solid;
+			}
+		</style>
+		<script type="text/javascript" src="/eel.js"></script>
+		<script type="text/javascript">
+			eel.expose(printWeb);
+			function printWeb(msg, color)
+			{
+				document.getElementById("output").innerHTML += "<p style='color: " + color + "'>" + msg + "</p>";
+			}
+
+			eel.expose(linkTo);
+			function linkTo(title, destination)
+			{
+				destination = destination.replace(/\\/g, "\\\\");
+				document.getElementById("dirMap").innerHTML += "<a href='#' onclick='eel.navigate(\"" + destination + "\")'>" + title + "</a><br>";
+			}
+
+			eel.expose(setCurrentDir)
+			function setCurrentDir(path)
+			{
+				document.getElementById("currentDir").innerHTML = "<b>" + path + "<b>";
+			}
+
+			eel.expose(clearDirMap);
+			function clearDirMap()
+			{
+				document.getElementById("dirMap").innerHTML = "";
+			}
+
+			eel.expose(displayContent);
+			function displayContent(content)
+			{
+				preview.innerHTML = content;
+			}
+
+			function navigateFromBar()
+			{
+				eel.navigate(document.getElementById("currentDir").innerText);
+			}
+
+			function launchFile()
+			{
+				eel.openFile(document.getElementById("currentDir").innerText);
+			}
+
+			eel.multiply(5, 10);
+		</script>
+	</head>
+	<body>
+		<p id="currentDir" contenteditable="true"><b>C:\</b></p><button onclick='navigateFromBar()'>Refresh</button>
+		<div id="dirMap"></div>
+		<p><b>File Preview</b></p><button onclick='launchFile()'>Open</button>
+		<div id="preview"></div><br>
+		<div id="output"><b>Debug Log</b><br></div>
+	</body>
+</html>
